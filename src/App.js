@@ -12,6 +12,11 @@ import * as ReactDOM from 'react-dom/client';
 import axios from 'axios';
 
 
+function myFunction(id) {
+  const element = document.getElementById(id);
+  element.scrollIntoView();
+}
+
 const Logo = () => {
   return (
     <a href='https://www.ilopoiisi.gr/services/' target='_blank' rel="noreferrer" className="w-60 h-24 bg-zinc-50 flex mb-4 font-medium rounded-t-2xl rounded-e-2xl text-gray-900 title-font md:mb-0">
@@ -27,7 +32,7 @@ const Logo = () => {
 // NavLink component
 const NavLink = ({ href, children, onClick }) => {
   return (
-    <a href={href} className=" mr-5 font-medium hover:text-orange-700" onClick={onClick}>
+    <a href={href} className=" mr-5 font-medium hover:text-orange-600" onClick={onClick}>
       {children}
     </a>
   );
@@ -36,9 +41,9 @@ const NavLink = ({ href, children, onClick }) => {
 const Navigation = ({ onContactClick, onHomeClick }) => {
   return (
     <nav className="flex flex-wrap items-center justify-center  text-lg md:ml-auto md:mr-auto">
-      <NavLink href="#" onClick={() => onHomeClick()}>Home</NavLink>
-      <NavLink href="#_">About</NavLink>
-      <NavLink href="#_" onClick={() => onContactClick()}>Contact</NavLink>
+      <NavLink href="http://localhost:3000/" onClick={() => myFunction('home')}>Home</NavLink>
+      <NavLink href="#" onClick={() => myFunction('faq')}>FAQ</NavLink>
+      <NavLink href="#" onClick={() => myFunction('contact')}>Contact</NavLink>
     </nav>
   );
 };
@@ -177,7 +182,7 @@ const Portfolio = () => {
               category="Συγχρονισμός"
               title="Παραγγελιών-Πελατών"
               button="Sync Now"
-              buttonHref="#"
+              buttonHref="./login.html"
               showCard={showCard}
             />
             <PortfolioCard
@@ -240,12 +245,15 @@ const PortfolioCard = ({
             </span>
             <h3 className="text-dark dark:text-white mb-5 text-xl font-bold">{title}</h3>
             <div id='prog' className='py-1'>
-            <button
+              <a href={buttonHref} target='_blank' className='bg-cyan-900 hover:bg-orange-300 hover:text-cyan-800 text-orange-300 inline-block rounded-md border  py-[10px] px-7 text-sm font-medium transition'>
+                {button}
+              </a>
+              {/* <button
               onClick={handleSyncClick}
               className="bg-cyan-900 hover:bg-orange-300 hover:text-cyan-800 text-orange-300 inline-block rounded-md border  py-[10px] px-7 text-sm font-medium transition "
             >
               {button}
-            </button>
+            </button> */}
             </div>
           </div>
         </div>
@@ -257,7 +265,7 @@ const PortfolioCard = ({
 //Header Component
 const Header = () => {
   return (
-    <header className="w-full mt-3  text-cyan-900 shadow-md bg-opacity-80 rounded-3xl border-orange-950 body-font">
+    <header className="mx-auto w-full mt-3 bg-gradient-to-r from-orange-400 to-blue-300 text-cyan-900 shadow-md  rounded-3xl border-orange-950 body-font">
       <HeaderContent />
     </header>
   );
@@ -265,25 +273,9 @@ const Header = () => {
 
 const HeaderContent = () => {
   const [showForm, setShowForm] = useState(false);
-  const [showContactSection, setShowContactSection] = useState(false);
-  const [showSyncCard, setshowSyncCard] = useState(false)
-
-  const handleContactClick = () => {
-    setShowContactSection(true);
-    setShowForm(false);
-    setshowSyncCard(false);
-  };
-
-  const handleHomeClick = () => {
-    setshowSyncCard(true);
-    setShowForm(false);
-    setShowContactSection(false);
-  };
 
   const handleButtonClick = () => {
     setShowForm(true);
-    setShowContactSection(false);
-    setshowSyncCard(false);
 
   };
 
@@ -297,20 +289,12 @@ const HeaderContent = () => {
     if (showForm) {
       root.render(<LoginForm onClose={handleFormClose} />);
     }
-
-    if (showContactSection) {
-      root.render(<ContactSection />);
-    }
-
-    if (showSyncCard) {
-      root.render(<Portfolio />);
-    }
-  }, [showForm, showContactSection, showSyncCard]);
+  }, [showForm,]);
 
   return (
     <div className="container flex flex-col items-center justify-between px-6 mx-auto md:flex-row">
       <Logo />
-      <Navigation onContactClick={handleContactClick} onHomeClick={handleHomeClick} />
+      <Navigation />
       <UserActions onLoginClick={handleButtonClick} />
     </div>
   );
@@ -486,15 +470,15 @@ const ContactInfo = ({ icon, title, description, contactInfo }) => {
 
       <h2 className="mt-4 text-lg font-medium text-cyan-900 dark:text-white">{title}</h2>
       <p className="mt-2 text-cyan-700 dark:text-gray-400">{description}</p>
-      <p className="mt-2 text-orange-700 dark:text-cyan-400">{contactInfo}</p>
+      <p className="select-all mt-2 text-orange-700 dark:text-cyan-400">{contactInfo}</p>
     </div>
   );
 };
 
 const ContactSection = () => {
   return (
-    <section className="my-24 bg-white bg-opacity-40 rounded-full dark:bg-gray-900">
-      <div className="container px-6 py-12 mx-auto">
+    <section className="my-24  bg-white bg-opacity-40 rounded-full dark:bg-gray-900">
+      <div id='contact' className="container px-6 py-12 mx-auto">
         <div className="text-center">
           <p className="font-medium text-orange-700 dark:text-blue-400">Contact us</p>
           <h1 className="mt-2 text-2xl font-semibold text-cyan-900 md:text-3xl dark:text-white">Ας έρθουμε σε επαφή</h1>
@@ -600,16 +584,120 @@ const SyncComponent = () => {
   );
 };
 
+const FaqComponent = () => {
+  return (
+
+    <div class="container my-24 mx-auto md:px-6">
+      <section class="">
+        <div class="grid gap-4 md:grid-cols-2">
+          <div class=" md:mb-0">
+            <h2 class="text-cyan-950 mb-3 text-3xl leading-[1.208] font-bold sm:text-4xl md:text-[40px]">Συχνές ερωτήσεις</h2>
+
+            <p class="text-cyan-900 text-body-color dark:text-dark-6 text-xl">
+              Δεν βρήκατε την απάντησή σας στo <span className='text-orange-700 font-semibold'>FAQ</span>?
+            </p>
+            <p class="text-cyan-900 text-xl font-semibold">
+              <a href="#!" onClick={() => myFunction('contact')}>
+                Επικοινωνήστε με την ομάδα μας.</a>.
+            </p>
+          </div>
+
+          <div class="mb-6 md:mb-0">
+            <p class="text-cyan-950 mb-3 text-xl leading-[1.208] font-bold  ">Γιατί δεν συγχρονίζει το συγκεκριμένο προιόν;</p>
+            <p class="mb-12 text-cyan-900 text-body-color text-lg dark:text-dark-6">
+              Ελέγξτε προσεκτικά και βεβαιωθείτε ότι έχετε συμπληρώσει όλα τα απαραίτητα πεδία για το προϊόν, όπως το όνομα,
+              η τιμή, η περιγραφή, και άλλες σχετικές πληροφορίες. Εξασφαλίστε ότι κανένα από αυτά τα πεδία δεν είναι κενό ή
+              περιέχει ανακριβείς πληροφορίες.
+              Η επιτυχία του συγχρονισμού εξαρτάται από την ορθή συμπλήρωση αυτών των πεδίων, επομένως, επανεξετάσετε τα
+              δεδομένα πριν προχωρήσετε.
+            </p>
+
+            <p class="text-cyan-950 mb-3 text-xl leading-[1.208] font-bold">Γιατί δεν ολοκληρώνεται ο συγχρονισμός;</p>
+            <p class="mb-12 text-cyan-900 text-body-color text-lg dark:text-dark-6">
+
+              Μην ξεχνάτε ότι δεν πρέπει ο όγκος των προϊόντων να μην είναι μεγάλος, γιατί θα χαθεί η επικοινωνία με τον διακομιστή.
+            </p>
+
+            <p class="text-cyan-950 mb-3 text-xl leading-[1.208] font-bold">
+              Praesentium voluptatibus temporibus consequatur non aspernatur?
+            </p>
+            <p class="mb-12 text-cyan-900 text-body-color text-lg dark:text-dark-6">
+              Minima sunt at nulla tenetur, numquam unde quod modi magnam ab
+              deserunt ipsam sint aliquid dolores libero repellendus cupiditate
+              mollitia quidem dolorem.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  );
+}
+
+const ScrollButton = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  // To useEffect xrisimopoieitai gia na elegxei to scroll kathe stigmi
+  useEffect(() => {
+    const handleScroll = () => {
+      // Se afto to paradeigma, to 100 einai to upsos pou prepei na kateveis prin emfanistei to kryfo button
+      const scrollY = window.scrollY;
+      if (scrollY > 100) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    // Event listener gia na akouei to scroll event
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup gia na afairethei to event listener otan to component katastrefetai
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []); // [] gia na treksei mono mia fora stin arxi
+
+  // To kryfo button tha emfanizetai mono an isVisible einai true
+  return (
+    <div>
+      {isVisible && (
+        <button class=" fixed z-50 bottom-10 right-10 p-4 border-0 w-14 h-14 rounded-full shadow-md bg-orange-500 hover:bg-orange-700 text-white text-lg font-semibold transition-colors duration-300" onClick={scrollToTop}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path d="M12 4l8 8h-6v8h-4v-8H4l8-8z" />
+          </svg>
+          <span class="sr-only">Go to top</span>
+        </button>
+      )}
+    </div>
+  );
+};
+
+// Synartisi pou tha kaleitai otan o xristis pataei to kryfo button
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth' // Kanei to scroll smoothly
+  });
+};
+
 //Main Function
 export default function App() {
 
+
   return (
-    <div className="bg-gradient-to-r from-orange-400 to-blue-300 ">
+    <div id='home' className=" scroll-smooth">
       <header>
         <Header />
-        <div id='roott' className=''>
+        <div id='roott' className='mx-12'>
           <Portfolio />
+          <div id='faq'></div>
+          <FaqComponent />
+          <ContactSection />
+          <ScrollButton />
+
         </div>
+
         <div id='progress'></div>
       </header>
 
